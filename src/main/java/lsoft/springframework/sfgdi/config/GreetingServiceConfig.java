@@ -1,16 +1,31 @@
 package lsoft.springframework.sfgdi.config;
 
+import com.springframework.pets.PetService;
+import com.springframework.pets.PetServiceFactory;
 import lsoft.springframework.sfgdi.Repository.EnglishGreetingRepository;
 import lsoft.springframework.sfgdi.Repository.EnglishGreetingRepositoryImpl;
 import lsoft.springframework.sfgdi.services.*;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
-import org.springframework.context.annotation.Profile;
+import org.springframework.context.annotation.*;
 import org.springframework.stereotype.Service;
 
+@ImportResource("classpath:sfgdi-config.xml")
 @Configuration
 public class GreetingServiceConfig {
+
+    @Bean
+    PetServiceFactory petServiceFactory() { return new PetServiceFactory(); }
+
+    @Bean
+    @Profile({"dog","default"})
+    PetService dogPetService(){
+        return petServiceFactory().getPetService("dog");
+    }
+
+    @Bean
+    @Profile({"cat"})
+    PetService catPetService(){
+        return petServiceFactory().getPetService("cat");
+    }
 
     @Bean
     EnglishGreetingRepository englishGreetingRepository(){
@@ -35,10 +50,10 @@ public class GreetingServiceConfig {
         return new PrimaryGreetingService();
     }
 
-    @Bean
-    ConstructorGreetingService constructorGreetingService() {
-        return new ConstructorGreetingService();
-    }
+    // @Bean -- Configurado en el XML
+    //ConstructorGreetingService constructorGreetingService() {
+    //    return new ConstructorGreetingService();
+    //}
 
     @Bean
     PropertyInjectedGreetingService propertyInjectedGreetingService() {
@@ -49,7 +64,5 @@ public class GreetingServiceConfig {
     SetterInjectedGreetingService setterInjectedGreetingService(){
         return new  SetterInjectedGreetingService();
     }
-
-
 
 }
