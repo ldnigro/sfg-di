@@ -4,13 +4,42 @@ import com.springframework.pets.PetService;
 import com.springframework.pets.PetServiceFactory;
 import lsoft.springframework.sfgdi.Repository.EnglishGreetingRepository;
 import lsoft.springframework.sfgdi.Repository.EnglishGreetingRepositoryImpl;
+import lsoft.springframework.sfgdi.datasource.FakeDataSource;
 import lsoft.springframework.sfgdi.services.*;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.*;
 import org.springframework.stereotype.Service;
-
+//@PropertySource("classpath:datasource.properties")
+@EnableConfigurationProperties(SfgConstructorConfig.class)
 @ImportResource("classpath:sfgdi-config.xml")
 @Configuration
 public class GreetingServiceConfig {
+
+
+    /* @Bean
+     FakeDataSource fakeDataSource(@Value("${lsoft.username}") String username,
+                                  @Value("${lsoft.password}") String password,
+                                  @Value("${lsoft.jdbcurl}") String jdbcurl){
+        FakeDataSource fakeDataSource = new FakeDataSource();
+        fakeDataSource.setJdbcurl(jdbcurl);
+        fakeDataSource.setPassword(password);
+        fakeDataSource.setUsername(username);
+
+        return fakeDataSource;
+    }*/
+
+    //Bind configuration
+    @Bean
+    FakeDataSource fakeDataSource(SfgConfiguration sfgConfiguration) {
+        FakeDataSource fakeDataSource = new FakeDataSource();
+        fakeDataSource.setJdbcurl(sfgConfiguration.getJdbcurl());
+        fakeDataSource.setPassword(sfgConfiguration.getPassword());
+        fakeDataSource.setUsername(sfgConfiguration.getUsername());
+
+        return fakeDataSource;
+    }
 
     @Bean
     PetServiceFactory petServiceFactory() { return new PetServiceFactory(); }

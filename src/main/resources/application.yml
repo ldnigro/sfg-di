@@ -1,0 +1,14 @@
+spring:
+  profiles:
+    active:
+      - cat
+      - EN
+      - prod
+
+---
+spring:
+  profiles: prod
+lsoft:
+  username: yml-user-prod
+  password: yml-password-prod
+  jdbcurl: yml-url-prod

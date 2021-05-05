@@ -1,0 +1,4 @@
+lsoft:
+  username: yml-user-qa
+  password: yml-password-qa
+  jdbcurl: yml-url-qa
